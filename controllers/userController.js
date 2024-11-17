@@ -19,22 +19,18 @@ exports.registerUser = async (req, res) => {
     }
 };
 exports.getAllAssignments = async (req, res) => {
-    const { email, password, status } = req.query;
-  
+    const { email, password, status } = req.query; 
     try {
-      // Authenticate the user
+    
       const user = await User.findOne({ email, password });
       if (!user) {
         return res.status(401).json({ message: 'Invalid email or password' });
       }
-  
-      // Build the query object
+    
       const query = { userId: user._id };
       if (status) {
         query.status = status;
       }
-  
-      // Fetch assignments based on query
       const assignments = await Assignment.find(query).populate('adminId', 'name email');
       return res.json(assignments);
     } catch (error) {
